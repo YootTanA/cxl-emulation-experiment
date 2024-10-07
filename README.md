@@ -1,5 +1,5 @@
 
-**To run the script in this repository, you are going to need to essential things.**
+**To run the script in this repository, you are going to need to a few essential things.**
 
 **First** is qemu-system-x86_64 binary that have CXL feature. So, go ahead to https://gitlab.com/jic23/qemu and build it.
 
