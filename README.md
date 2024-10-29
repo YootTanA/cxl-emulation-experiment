@@ -8,7 +8,7 @@
 
 Once they're all set, you should get the output from `ls` that looks similar to this one
 
-    user@host/CXL_experiment/numa:$ ls
+    user@host/cxl-emulation-experiment/numa:$ ls
     Fedora-Cloud-Base-38-1.6.x86_64.qcow2 numa.sh  numa_with_diff_distance.sh  share1.qcow2  share2.qcow2
 
 Now go execute your preferred script and enjoy.
@@ -99,7 +99,7 @@ Now, we should have a directory named memshare in our current working space.
 
 Next, clone my repository to your local machine.
 
-    git clone https://github.com/YootTanA/CXL_experiment.git
+    git clone https://github.com/YootTanA/cxl-emulation-experiment.git
 
 
 That's it for this section.
@@ -109,16 +109,16 @@ In this section we are going to use a script in `numa` directory to create a vir
 
 Before we begin we need to copy important files to `numa` directory
 
-     cp ./memshare/{Fedora-Cloud-Base-38-1.6.x86_64.qcow2,share1.qcow2,share2.qcow2} ./CXL_experiment/numa/
+     cp ./memshare/{Fedora-Cloud-Base-38-1.6.x86_64.qcow2,share1.qcow2,share2.qcow2} ./cxl-emulation-experiment/numa/
 
 When list files in `numa` directory, you should see something similar to the output below.
 
-	$ ls CXL_experiment/numa/
+	$ ls cxl-emulation-experiment/numa/
 	Fedora-Cloud-Base-38-1.6.x86_64.qcow2  numa_with_distance.sh  share2.qcow2  numa.sh                                share1.qcow2
 
 Let's go check out `numa` directory
 
-	cd CXL_experiement/numa
+	cd cxl-emulation-experiment/numa
 
 Since we now have all necessary resources to run a virtual machine with CXL on our server, let's first go over the content of my script.
 
