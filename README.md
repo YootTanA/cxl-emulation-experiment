@@ -9,6 +9,15 @@ along the way by yourself.
 
 ##
 
+### Table of contents
+- [What is a CXL device?]()
+- [Why do I need a emulating CXL device?]()
+- [Create a virtual machine image]()
+- [Configure the virtual machine's kernel]()
+
+##
+
+
 ### What is a CXL device?
 Well, this might be the first question that come to mind, if you've never heard of this device before.
 As for me, I'm still exploring the posibility of this kind of device. 
