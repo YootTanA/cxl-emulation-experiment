@@ -12,7 +12,7 @@ along the way by yourself.
 ### Table of contents
 - [What is a CXL device?](https://github.com/YootTanA/cxl-emulation-experiment#what-is-a-cxl-device)
 - [Why do I need a emulating CXL device?](https://github.com/YootTanA/cxl-emulation-experiment#why-do-i-need-a-emulating-cxl-device)
-- [Create a virtual machine image]()
+- [Create a virtual machine image](https://github.com/YootTanA/cxl-emulation-experiment#create-a-virtual-machine-image)
 - [Configure the virtual machine's kernel]()
 
 ##
@@ -91,7 +91,9 @@ wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.8.0-amd
 
 - Create the hard disk image
 
-**NOTE:** Before running the command below, it's worth to understand the difference between raw and qcow2 formats. I recommend reading more about them from the reliable sources. In short, the reason I chose qcow2 format is that it stands for **QEMU Copy-On-Write version 2**. As that name suggests, qcow2 natively works with QEMU software and supports features likes snapshots and compression, which allow it to use less disk space compare to raw format.
+**NOTE:** Before running the command below, it's worth to understand the difference between raw and qcow2 formats. I recommend reading more about them from the reliable sources. 
+
+In short, the reason I chose qcow2 format is that it stands for **QEMU Copy-On-Write version 2**. As that name suggests, qcow2 natively works with QEMU software and supports features likes snapshots and compression, which allow it to use less disk space compare to raw format.
 
 **disclaimer** I've never tried using raw format in my experiment before. If I get a change to try it, I will come back to update the result.
 
