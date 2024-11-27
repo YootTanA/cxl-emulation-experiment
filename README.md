@@ -71,25 +71,25 @@ First things first, we'll need a virtual machine image that is ready to boot a o
 #### Create a QEMU Debian 12 image
 
 
-- Install necessary dependencies on the host operating system
+Install necessary dependencies on the host operating system
 
 ```bash
 sudo apt install qemu-utils qemu-system-x86 qemu-system-gui
 ```
 
-- Create a working directory (optional)
+Create a working directory (optional)
 
 ```bash
 mdkir debian12-qemu && cd debian12-qemu
 ```
 
-- Download a Debian 12 image
+Download a Debian 12 image
 
 ```bash
 wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.8.0-amd64-netinst.iso
 ```
 
-- Create the hard disk image
+Create the hard disk image
 
 **NOTE:** Before running the command below, it's worth to understand the difference between raw and qcow2 formats. I recommend reading more about them from the reliable sources. 
 
@@ -101,7 +101,7 @@ In short, the reason I chose qcow2 format is that it stands for **QEMU Copy-On-W
 qemu-img create -f qcow2 debian.qcow2 20G
 ```
 
-- Boot the image and install Debian 12 minimal server on it
+Boot the image and install Debian 12 minimal server on it
 
 **NOTE** I have 16 gigabyte of memory on my server, so I allocated half of it to the booting process. You may want to adjust the memory allocation to suit the constraints of your physical machine. The same applies to adjusting the number of CPU cores.
 
