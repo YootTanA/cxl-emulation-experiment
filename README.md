@@ -13,7 +13,7 @@ along the way by yourself.
 - [What is a CXL device?](https://github.com/YootTanA/cxl-emulation-experiment#what-is-a-cxl-device)
 - [Why do I need a emulating CXL device?](https://github.com/YootTanA/cxl-emulation-experiment#why-do-i-need-a-emulating-cxl-device)
 - [Create a virtual machine image](https://github.com/YootTanA/cxl-emulation-experiment#create-a-virtual-machine-image)
-- [Configure the virtual machine's kernel]()
+- [Configure the virtual machine's kernel](https://github.com/YootTanA/cxl-emulation-experiment/tree/main#configure-the-virtual-machines-kernel)
 
 ##
 
