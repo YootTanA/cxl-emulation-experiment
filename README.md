@@ -74,7 +74,7 @@ First things first, we'll need a virtual machine image that is ready to boot a o
 Install necessary dependencies on the host operating system
 
 ```bash
-sudo apt install qemu-utils qemu-system-x86 qemu-system-gui
+apt install qemu-utils qemu-system-x86 qemu-system-gui
 ```
 
 Create a working directory (optional)
@@ -113,4 +113,131 @@ Modifying these numbers will significantly improve the booting process.
 ```bash
 qemu-system-x86_64 -hda debian.qcow2 -cdrom debian-12.8.0-amd64-netinst.iso -boot d -m 8G -smp 10
 ```
+
 After booting and installtion are done, we are now ready to the next step.
+
+##
+
+### Configure the virtual machine's kernel
+
+Before proceeding this step, you need to finished the earlier step ([Create a virtual machine image](https://github.com/YootTanA/cxl-emulation-experiment#create-a-virtual-machine-image)) 
+
+In this step, we will use the `debian.qcow2` image that we just creaetd to boot up the virtual image, and then we will customize its kernel to enable kernel functionlity for working with CXL devices.
+
+#### Booting up a virtual machine from the image
+
+**NOTE:** Some of commands below might require permission to run. I don't want to judge your journey by adding
+**sudo** in front of the command, as I know there are some nerds prefer using **doas** or others root management tools.
+
+Launching the virtual machine with the following command
+
+```bash
+qemu-system-x86_64 \
+-hda debian.qcow2 \
+-smp 10 \
+-m 8G \
+-net user,hostfwd=tcp::2222-:22 \
+-net nic \
+```
+
+Once the virtual machine successfully start up, we can begin building a new kernel for CXL devices.
+
+#### Configure a new kernel
+
+In the virtual machine, go download a kernel source to the local working directory.
+
+```bash
+wget https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.3.7.tar.xz
+```
+
+I specifically went for the kernel version 6.3.7, as it is the same version as the one in the image from Memverge.
+
+Uncompress the tar file
+
+```bash
+tar xaf linux-6.3.7.tar.xz && cd linux-6.3.7
+```
+
+Copy the old kernel config to the directory (In Debian, it resides in /boot)
+
+```bash
+cp /boot/config-6.1.0-26-amd64 .config
+```
+
+Now we are ready to rock, run the command below to configure kernel config.
+If this is your first time, I bet your are feeling excited right now.
+
+```bash
+make menuconfig
+```
+
+The grey screen full of configurations should appear on your terminal. If it don't, you might did something wrong.
+
+
+Kernel configurations below are the ones I applied to my virturl machine.
+The article from Memverge states that `CONFIG_CXL_REGION_INVALIDATION_TEST` is the required configuration.
+Anyway, it's not hurt to follow my configuration that is already work on my virtual machine.
+
+```bash
+CONFIG_CXL_BUS=y
+CONFIG_CXL_PCI=m
+CONFIG_CXL_ACPI=m
+CONFIG_CXL_PMEM=m
+CONFIG_CXL_MEM=m
+CONFIG_CXL_PORT=y
+CONFIG_CXL_SUSPEND=y
+CONFIG_CXL_REGION=y
+CONFIG_CXL_REGION_INVALIDATION_TEST=y
+CONFIG_DEV_DAX_CXL=m
+```
+
+Once you have finished and saved the new configuration, you will need to compile a new kernel.
+
+But hold your hourses!! Before we are going further, I want to give you some insight.
+
+Compiling kernel could be a super long process, sometimes it takes day to finishes depend on your hardwares. Moreover, it is a memory consuming process, it will allocate a lot of memory for display debugging output. 
+
+Run the below command to create a environment variable that will disable the output.
+
+```bash
+export DEB_BUILD_PROFILES='pkg.linux.nokerneldbg pkg.linux.nokerneldbginfo'
+```
+
+Then verify if the new variable is loaded
+
+```bash
+printenv | grep DEB_BUILD_PROFILES
+```
+
+Trust me, you don't want to let your kernel compile overnight, only to wake up and find it has failed. (I learned it hard way though)
+
+**Reference**
+- https://kernel-team.pages.debian.net/kernel-handbook/ch-common-tasks.html#s-common-building
+
+From now on, we will be compiling the kernel. I used `-j10` in the command below since my virtual machine has 10 CPU cores.
+If you would like to accelerate you build process, don't forget to add the flag to the command and adjust to what suit your hardwares.
+
+```bash
+sudo make -j10 bindeb-pkg
+```
+
+It will take a long time. Let go grab a glass of coffee or yellow liquid (you know what I mean?) 
+
+Once, the compiling has done. Run this command to verify that we have the package for install a new kernel.
+
+```bash
+ls ../ | grep *.deb
+```
+
+You should see some `*.deb` files, unless there is something wrong.
+
+Let's say that everything is okay. Go to where *.deb files reside and run this command.
+
+```bash
+sudo dpkg -i linux-*.deb
+```
+
+Now, the kernel will be installed and Grub also be updated as a new kernel has emerged on your virtual machine.
+
+Let's reboot, and see if the kernel has changed to 6.3.7 or not.
+
