@@ -33,7 +33,7 @@ int main() {
 
   int c = 0;
   while ((c = fgetc(fptr)) != EOF) {
-    printf("%d\n", c);
+    putchar(c);
   }
 
   munmap(dax_addr, page_size);
