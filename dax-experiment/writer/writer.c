@@ -18,21 +18,21 @@ int main() {
   }
 
   if (fstat(file_fd, &file_stat) == -1) {
-    printf("Error getting file size");
+    printf("Error getting file size\n");
     close(file_fd);
   }
   size_t file_size = file_stat.st_size;
 
   int dax_fd = open("/dev/dax0.0", O_RDWR);
   if (dax_fd == -1) {
-    perror("open() failed");
+    printf("open() failed\n");
     return 1;
   }
 
   void *dax_addr = mmap(NULL, (2 * 1024 * 1024), PROT_READ | PROT_WRITE,
                         MAP_SHARED, dax_fd, 0);
   if (dax_addr == MAP_FAILED) {
-    perror("mmap() failed");
+    printf("mmap() failed\n");
     close(file_fd);
     close(dax_fd);
     return -1;
@@ -40,7 +40,7 @@ int main() {
 
   char *buffer = malloc(file_size);
   if (!buffer) {
-    printf("Error allocating buffer");
+    printf("Error allocating buffer\n");
     munmap(dax_addr, file_size);
     close(file_fd);
     close(dax_fd);
@@ -48,7 +48,7 @@ int main() {
   }
 
   if (read(file_fd, buffer, file_size) != file_size) {
-    printf("Error reading input file");
+    printf("Error reading input file\n");
     free(buffer);
     munmap(dax_addr, file_size);
     close(file_fd);
@@ -58,7 +58,7 @@ int main() {
 
   memcpy(dax_addr, buffer, file_size);
   if (msync(dax_addr, file_size, MS_SYNC) == -1) {
-    printf("Error syncing memory");
+    printf("Error syncing memory\n");
   }
 
   free(buffer);
