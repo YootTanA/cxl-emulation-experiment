@@ -21,7 +21,7 @@ int main() {
     printf("Error getting file size\n");
     close(file_fd);
   }
-  size_t file_size = file_stat.st_size;
+  // size_t file_size = file_stat.st_size;
 
   int dax_fd = open("/dev/dax0.0", O_RDWR);
   if (dax_fd == -1) {
@@ -29,8 +29,10 @@ int main() {
     return 1;
   }
 
-  void *dax_addr = mmap(NULL, (2 * 1024 * 1024), PROT_READ | PROT_WRITE,
-                        MAP_SHARED, dax_fd, 0);
+  int file_size = (2 * 1024 * 1024);
+
+  void *dax_addr =
+      mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_SHARED, dax_fd, 0);
   if (dax_addr == MAP_FAILED) {
     printf("mmap() failed\n");
     close(file_fd);
