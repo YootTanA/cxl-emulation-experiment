@@ -21,15 +21,13 @@ int main() {
     printf("Error getting file size\n");
     close(file_fd);
   }
-  // size_t file_size = file_stat.st_size;
+  size_t file_size = file_stat.st_size;
 
   int dax_fd = open("/dev/dax0.0", O_RDWR);
   if (dax_fd == -1) {
     printf("open() failed\n");
     return 1;
   }
-
-  int file_size = (2 * 1024 * 1024);
 
   void *dax_addr =
       mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_SHARED, dax_fd, 0);
